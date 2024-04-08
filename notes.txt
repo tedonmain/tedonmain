@@ -1,0 +1,74 @@
+
+Day 1
+
+--subst fake drive
+subst /? ...for help
+--creating a w: drive
+subst w: C:\Users\ted\OneDrive\work
+
+--visual studio compiler is not in the path
+"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x64
+
+--create a batch file in Windows Startup
+--use Admin privs
+cd C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp
+(startup.bat)
+@echo off
+subst w: C:\Users\ted\OneDrive\work
+
+--create a batch file in the W:\handmade\misc
+(shell.bat)
+@echo off
+call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x64
+set path=w:\handmade\misc;%path%
+
+EMACS (oh no!)
+--in W:\handmade\misc
+(.emacs)
+--should be help in GitHub project for how to configure emacs to use this .emacs file
+
+--create an alias for emacs on Windows 
+--https://emacs.stackexchange.com/questions/67985/how-to-create-shell-aliases-in-emacs-gui-in-windows
+doskey em="C:\Program Files\Emacs\emacs-29.2\bin\runemacs.exe"
+
+--cmd.exe shortcut on desktop 
+Target: %windir%\system32\cmd.exe /k w:\handmade\misc\shell.bat
+
+W:\handmade\misc\shell.bat
+@echo off
+call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x64
+set path=w:\handmade\misc;%path%
+doskey em="C:\Program Files\Emacs\emacs-29.2\bin\runemacs.exe"
+
+--Desktop command prompt shortcut:
+%windir%\system32\cmd.exe /k w:\handmade\misc\shell.bat
+
+slick!
+double-click the Desktop command prompt shortcut
+W:\
+you are good to go!
+you can run emacs 
+
+--update build.bat
+@echo off
+mkdir ..\..\build
+pushd ..\..\build
+cl -Zi ..\handmade\code\win32_handmade.cpp user32.lib (note: user23.lib had to be added later to access non-kernel stuff)
+popd
+(Note: -Zi = flag to generate debug info)
+
+--now start Visual Studio with a path to the file (.exe) we are going to run
+W:\handmade\code> devenv \build\win32_handmade.exe
+This brings up Visual Studio with a pseudo project that includes the win32_handmade.exe (Application Executable)
+create a directory named data in W:\handmade
+--change Working Directory 
+	from w:build 
+	to W:\handmade\data
+...which is where we want the working directory of the game to be...
+
+Review:
+Edit code
+compile using W:\handmade\code\build.bat (W:\> build)
+start VisualStudio: W:\handmade\code\build.bat (W:\> devenv \build\win32_handmade.exe)
+
+
